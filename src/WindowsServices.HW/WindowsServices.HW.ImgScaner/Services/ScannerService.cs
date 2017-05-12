@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using WindowsServices.HW.ImgScanner.Utils;
 
 namespace WindowsServices.HW.ImgScanner.Services
 {
@@ -9,10 +10,17 @@ namespace WindowsServices.HW.ImgScanner.Services
     {
         private readonly Scanner _scanner;
 
-        public ScannerService(string inputFolders, string outputFolder)
+        public ScannerService(string inputFolders, string outputFolder, string scanInterval)
         {
             var folders = inputFolders.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-            _scanner = new Scanner(folders, outputFolder);
+
+            int interval;
+            if (!int.TryParse(scanInterval, out interval))
+            {
+                interval = 5*1000;
+            }
+            _scanner = new Scanner(folders, outputFolder, interval);
+
         }
 
 

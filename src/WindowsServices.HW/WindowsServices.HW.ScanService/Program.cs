@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
 using WindowsServices.HW.ImgScanner.Services;
 using Topshelf;
 using NLog;
@@ -18,15 +15,17 @@ namespace WindowsServices.HW.ScanService
         static void Main(string[] args)
         {
             string inputFolders = string.Empty;
-            string outputPath = string.Empty;
+            string outputFolder = string.Empty;
+            string scanInterval = string.Empty;
 
-            string logName = Path.Combine(@"C:\winserv\", "CustomCommandService.log");
+            string logPath = GetLogPath(args); 
+
 
             var logConfig = new LoggingConfiguration();
             var target = new FileTarget()
             {
                 Name = "Def",
-                FileName = Path.Combine(logName, "log.txt"),
+                FileName = logPath,
                 Layout = "${date} ${message} ${onexception:inner=${exception:format=toString}}"
             };
 
@@ -36,38 +35,40 @@ namespace WindowsServices.HW.ScanService
             var logFactory = new LogFactory(logConfig);
 
 
-            try
+            HostFactory.Run(x =>
             {
+                x.AddCommandLineDefinition("inputFolders", i => { inputFolders = i; });
+                x.AddCommandLineDefinition("outputFolder", o => { outputFolder = o; });
+                x.AddCommandLineDefinition("scanInterval", si => { scanInterval = si; });
+                x.AddCommandLineDefinition("logPath", log => {  });
 
-                HostFactory.Run(x =>
-                {
-                    x.AddCommandLineDefinition("inputFolders", i => { inputFolders = i; });
-                    x.AddCommandLineDefinition("outputPath", o => { outputPath = o; });
-
-                    x.Service<ScannerService>(
+                x.Service<ScannerService>(
                     
-                        conf=>
-                        {
-                            conf.ConstructUsing(() => new ScannerService(inputFolders, outputPath));
-                            conf.WhenStarted((service, host) => {  service.Start() ;return true; });
-                            conf.WhenStopped(service => service.Stop());
-                        }).UseNLog(logFactory);
+                    conf=>
+                    {
+                        conf.ConstructUsing(() => new ScannerService(inputFolders, outputFolder, scanInterval));
+                        conf.WhenStarted((service, host) => {  service.Start() ;return true; });
+                        conf.WhenStopped(service => service.Stop());
+                    }).UseNLog(logFactory);
 
-                    x.SetDescription("Scaner Service");
-                    x.SetDisplayName("Scaner Service");
-                    x.SetServiceName("WindowsServices.HW.ScanService");
-                    x.StartAutomaticallyDelayed();
-                    x.RunAsLocalService();
-                });
-            }
-            catch (Exception e)
+                x.SetDescription("Scaner Service");
+                x.SetDisplayName("Scaner Service");
+                x.SetServiceName("WindowsServices.HW.ScanService");
+                x.StartAutomaticallyDelayed();
+                x.RunAsLocalService();
+            });
+        }
+
+        private static string GetLogPath(string[] args)
+        {
+            const string LOG = "-logPath:";
+            string arg = args.FirstOrDefault(x => x.StartsWith(LOG));
+            if (arg == null )
             {
-                File.AppendAllText(logName, string.Format("{0} Command {1} \n", DateTime.Now.ToLongTimeString(), e.ToString()));
-                throw;
+                return @"C:\winserv\ImgScanner.log";
             }
-            //Console.ReadKey();
-
-
+            
+            return new string(arg.Skip(LOG.Length).ToArray());
         }
     }
 }

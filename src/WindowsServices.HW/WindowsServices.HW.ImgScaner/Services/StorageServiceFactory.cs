@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WindowsServices.HW.ImgScanner.Interfaces;
+using WindowsServices.HW.ImgScanner.Utils;
 
 namespace WindowsServices.HW.ImgScanner.Services
 {

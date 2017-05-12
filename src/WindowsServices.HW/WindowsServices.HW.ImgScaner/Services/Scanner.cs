@@ -10,7 +10,7 @@ namespace WindowsServices.HW.ImgScanner.Services
     public class Scanner
     {
         private readonly string[] _inputFolders;
-        private readonly string _outputFolder;
+        private readonly int _interval;
 
         Thread workingThread;
         ManualResetEvent workStop;
@@ -19,14 +19,15 @@ namespace WindowsServices.HW.ImgScanner.Services
         private IStorageService _storageService;
 
 
-        public Scanner(string[] inputFolders, string outputFolder)
+        public Scanner(string[] inputFolders, string outputFolder, int interval)
         {
             _inputFolders = inputFolders;
-            _outputFolder = outputFolder;
+            _interval = interval;
+
             _storageService = StorageServiceFactory.GetStorageService(outputFolder);
 
             CreateDirectoryIfNotExists(_inputFolders);
-            CreateDirectoryIfNotExists(_outputFolder);
+            CreateDirectoryIfNotExists(outputFolder);
 
             workStop = new ManualResetEvent(false);
             newFile = new AutoResetEvent(false);
@@ -55,7 +56,7 @@ namespace WindowsServices.HW.ImgScanner.Services
                 }
 
             }
-            while (WaitHandle.WaitAny(new WaitHandle[] { workStop, newFile } , 5*1000)!= 0);
+            while (WaitHandle.WaitAny(new WaitHandle[] { workStop, newFile } , _interval) != 0);
         }
 
         private void ScanFolder(string inputFolder)

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using WindowsServices.HW.ImgScanner.Interfaces;
 
-namespace WindowsServices.HW.ImgScanner.Services
+namespace WindowsServices.HW.ImgScanner.Utils
 {
     class LocalFolderStorage : IStorageService
     {
