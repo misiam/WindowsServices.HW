@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServices.HW.ScanService", "WindowsServices.HW.ScanService\WindowsServices.HW.ScanService.csproj", "{127EEF1B-0C4C-4200-A83B-02AFAA77D1C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServices.HW.ImgScanner", "WindowsServices.HW.ImgScaner\WindowsServices.HW.ImgScanner.csproj", "{AB34CD20-3675-4D99-A775-329EB6CF808E}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{127EEF1B-0C4C-4200-A83B-02AFAA77D1C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127EEF1B-0C4C-4200-A83B-02AFAA77D1C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127EEF1B-0C4C-4200-A83B-02AFAA77D1C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127EEF1B-0C4C-4200-A83B-02AFAA77D1C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB34CD20-3675-4D99-A775-329EB6CF808E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB34CD20-3675-4D99-A775-329EB6CF808E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB34CD20-3675-4D99-A775-329EB6CF808E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB34CD20-3675-4D99-A775-329EB6CF808E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
