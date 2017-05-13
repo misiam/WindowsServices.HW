@@ -34,12 +34,14 @@ namespace WindowsServices.HW.ScanService
 
             var logFactory = new LogFactory(logConfig);
 
+            var logger = ImgScanner.Utils.Logger.Current;
+            logger.SetActualLogger(logFactory.GetLogger("Topshelf"));
 
             HostFactory.Run(x =>
             {
-                x.AddCommandLineDefinition("inputFolders", i => { inputFolders = i; });
-                x.AddCommandLineDefinition("outputFolder", o => { outputFolder = o; });
-                x.AddCommandLineDefinition("scanInterval", si => { scanInterval = si; });
+                x.AddCommandLineDefinition("inputFolders", i => { inputFolders = i; logger.LogInfo(i); });
+                x.AddCommandLineDefinition("outputFolder", o => { outputFolder = o; logger.LogInfo(o); });
+                x.AddCommandLineDefinition("scanInterval", si => { scanInterval = si; logger.LogInfo(si); });
                 x.AddCommandLineDefinition("logPath", log => {  });
 
                 x.Service<ScannerService>(
@@ -65,7 +67,7 @@ namespace WindowsServices.HW.ScanService
             string arg = args.FirstOrDefault(x => x.StartsWith(LOG));
             if (arg == null )
             {
-                return @"C:\winserv\ImgScanner.log";
+                return @"C:\winserv\scanner.log";
             }
             
             return new string(arg.Skip(LOG.Length).ToArray());
